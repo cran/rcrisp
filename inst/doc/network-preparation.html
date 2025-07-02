@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>3. Preparing the network for delineation</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">3. Preparing the network for
+delineation</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(rcrisp)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(sfnetworks)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>bucharest_osm <span class="ot">&lt;-</span> <span class="fu">get_osm_example_data</span>()</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>bucharest_dem <span class="ot">&lt;-</span> <span class="fu">get_dem_example_data</span>()</span></code></pre></div>
+<div id="input-data" class="section level2">
+<h2>1. Input data</h2>
+<p>In this article we show how to set up the spatial network for a city
+before using it for urban river corridor delineation. We work with the
+OSM data for the city of Bucharest provided in rcrisp example data. See
+how to get your own OSM data in
+<code>vignette(&quot;getting-osm-data&quot;)</code>.</p>
+<p>We start by loading the OSM data. According to the delineation
+method, all persistent physical structures need to be considered.
+Therefore, the network will contain both streets and railways from
+OSM.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>streets <span class="ot">&lt;-</span> bucharest_osm<span class="sc">$</span>streets</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>railways <span class="ot">&lt;-</span> bucharest_osm<span class="sc">$</span>railways</span></code></pre></div>
+<p><strong>Note</strong>: If the city in question contains other
+surface-level structures that need to be included in the network, such
+as above-ground metro lines, retrieve them with the appropriate OSM tags
+following the instructions in <code>vignette(&quot;getting-osm-data&quot;)</code>
+and include them here in the network.</p>
+</div>
+<div id="setting-up-the-network" class="section level2">
+<h2>2. Setting up the network</h2>
+<p>After combining the streets and railway lines, we create a network
+object.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>network <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(streets, railways) <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="fu">as_sfnetwork</span>(<span class="at">directed =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="fu">activate</span>(<span class="st">&quot;nodes&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">node_id =</span> <span class="fu">row_number</span>())</span></code></pre></div>
+<p>To be able to use the network for delineation, we need to flatten it
+(that is, project bridges to the ground surface) and add nodes at all
+intersections between edges.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>network_new <span class="ot">&lt;-</span> <span class="fu">flatten_network</span>(network)</span></code></pre></div>
+<p>The function above first identifies unique apparent intersections
+between edges. Then it injects those points within the edge geometries
+(linestrings), so that they can be raised as network nodes in the
+cleaning step.</p>
+<p><strong>Note</strong>: <code>sfnetworks::st_network_blend</code>
+cannot be used for this purpose, because this function only adds
+external points to one edge (the closest one).</p>
+</div>
+<div id="network-cleaning" class="section level2">
+<h2>3. Network cleaning</h2>
+<p>We now perform standard cleaning tasks on the network: subdividing
+edges by adding missing nodes, removing pseudo-nodes and keeping only
+the main component of the network.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>network_cleaned <span class="ot">&lt;-</span> <span class="fu">clean_network</span>(network_new)</span></code></pre></div>
+</div>
+<div id="visualise-cleaned-network" class="section level2">
+<h2>4. Visualise cleaned network</h2>
+<p>Visualize cleaned network:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>network_new_nodes <span class="ot">&lt;-</span> network_cleaned <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="fu">activate</span>(<span class="st">&quot;nodes&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(node_id)) <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="fu">activate</span>(<span class="st">&quot;edges&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(from) <span class="sc">&amp;</span> <span class="fu">is.na</span>(to))</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>network_removed_nodes <span class="ot">&lt;-</span> network <span class="sc">|&gt;</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  <span class="fu">activate</span>(<span class="st">&quot;nodes&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>node_id <span class="sc">%in%</span> (<span class="fu">activate</span>(network_cleaned, <span class="st">&quot;nodes&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>                          <span class="fu">pull</span>(node_id))) <span class="sc">|&gt;</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  <span class="fu">activate</span>(<span class="st">&quot;edges&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(from) <span class="sc">&amp;</span> <span class="fu">is.na</span>(to))</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="fu">plot</span>(network, <span class="at">col =</span> <span class="st">&quot;grey50&quot;</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">425100</span>, <span class="dv">425400</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">4922400</span>, <span class="dv">4923000</span>),</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Network before preprocessing&quot;</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="fu">plot</span>(network_cleaned <span class="sc">|&gt;</span> <span class="fu">activate</span>(<span class="st">&quot;nodes&quot;</span>), <span class="at">col =</span> <span class="st">&quot;grey50&quot;</span>,</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">425100</span>, <span class="dv">425400</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">4922400</span>, <span class="dv">4923000</span>),</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Network after preprocessing&quot;</span>)</span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="fu">plot</span>(network_new_nodes, <span class="at">col =</span> <span class="st">&quot;darkgreen&quot;</span>,</span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">425100</span>, <span class="dv">425400</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">4922400</span>, <span class="dv">4923000</span>),</span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Network after preprocessing&quot;</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="fu">plot</span>(network_removed_nodes, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">pch =</span> <span class="dv">4</span>,</span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">425100</span>, <span class="dv">425400</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">4922400</span>, <span class="dv">4923000</span>),</span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Network after preprocessing&quot;</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img role="img" aria-label="The network before and after preprocessing." src="data:image/png;base64,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" alt="The network before and after preprocessing." /></p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>4. Corridor delineation</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">4. Corridor delineation</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(rcrisp)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>bucharest_osm <span class="ot">&lt;-</span> <span class="fu">get_osm_example_data</span>()</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>bucharest_dem <span class="ot">&lt;-</span> <span class="fu">get_dem_example_data</span>()</span></code></pre></div>
+<p>In this notebook we explore how to delineate an urban river corridor
+using river Dâmbovița in Bucharest, Romania. We will use OpenStreetMap
+(OSM) data, first from the Overpass API and then from a local file.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>city_name <span class="ot">&lt;-</span> <span class="st">&quot;Bucharest&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>river_name <span class="ot">&lt;-</span> <span class="st">&quot;Dâmbovița&quot;</span></span></code></pre></div>
+<p>We start by demonstrating the use of the all-in-one
+<code>delineate()</code> function which does the following three
+steps:</p>
+<ol style="list-style-type: decimal">
+<li><p>Fetches city boundary, street and rail network, as well as river
+centreline and surface data from the <a href="https://wiki.openstreetmap.org/wiki/Overpass_API">Overpass API</a>
+as shown in <code>vignette(&quot;getting-osm-data&quot;)</code>;</p></li>
+<li><p>Pre-processes the street and rail network for delineation as
+shown in <code>vignette(&quot;network-preparation&quot;)</code></p></li>
+<li><p>Constructs the initial corridor based on the chosen method. With
+the default <code>method = &quot;valley&quot;</code>, the Cost Distance
+Accumulation algorithm is used to delineate the corridor based on the
+digital elevation model (DEM) of the area retrieved from the <a href="https://element84.com/earth-search/">Earth Search API</a>. If the
+<code>method = &quot;buffer&quot;</code> is chosen instead, the corridor is
+constructed by buffering the river centreline and surface data with a
+given buffer distance.</p></li>
+<li><p>Delineates the corridor based on the pre-processed network and
+initial corridor. Optionally, the corridor is split into segments based
+on the network and the river space is delineated.</p></li>
+</ol>
+<p>The <code>delineate()</code> function carries out the above steps in
+one and returns a list that by default contains the following output
+elements: <code>corridor</code>, <code>segments</code>, and
+<code>riverspace</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>bucharest_dambovita <span class="ot">&lt;-</span> <span class="fu">delineate</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  city_name,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  river_name,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="at">segments =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="at">riverspace =</span> <span class="cn">TRUE</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; The default `network_buffer` of 3000 m is used for corridor delineation.</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; The default `buildings_buffer` of 100 m is used for riverspace delineation.</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; Calculating viewpoints from both river edge and river centerline.</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co"># Plot all layers within the extent of the delineated corridor</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>bbox <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(bucharest_dambovita<span class="sc">$</span>corridor)</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="fu">plot</span>(bucharest_dambovita<span class="sc">$</span>valley, <span class="at">col =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">border =</span> <span class="cn">NA</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(bbox[<span class="st">&quot;xmin&quot;</span>], bbox[<span class="st">&quot;xmax&quot;</span>]), <span class="at">ylim =</span> <span class="fu">c</span>(bbox[<span class="st">&quot;ymin&quot;</span>], bbox[<span class="st">&quot;ymax&quot;</span>]))</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="fu">plot</span>(bucharest_dambovita<span class="sc">$</span>riverspace, <span class="at">col =</span> <span class="st">&quot;lightgreen&quot;</span>, <span class="at">border =</span> <span class="cn">NA</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>     <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="fu">plot</span>(bucharest_osm<span class="sc">$</span>river_centerline, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="fu">plot</span>(bucharest_dambovita<span class="sc">$</span>segments, <span class="at">border =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="fu">plot</span>(bucharest_dambovita<span class="sc">$</span>corridor, <span class="at">border =</span> <span class="st">&quot;red&quot;</span>, <span class="at">wt =</span> <span class="dv">2</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img role="img" aria-label="Delineation of the corridor of River Dâmbovița in Bucharest" src="data:image/png;base64,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" alt="Delineation of the corridor of River Dâmbovița in Bucharest" /></p>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

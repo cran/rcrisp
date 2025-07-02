@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>5. Corridor segmentation</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">5. Corridor segmentation</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(rcrisp)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>bucharest_osm <span class="ot">&lt;-</span> <span class="fu">get_osm_example_data</span>()</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>bucharest_dem <span class="ot">&lt;-</span> <span class="fu">get_dem_example_data</span>()</span></code></pre></div>
+<p>For a more detailed analysis of an urban river corridor,
+corridor-level delineation may not be sufficient. The corridor needs to
+be subdivided into smaller morphological units. Segmentation is a
+process of subdividing the corridor by using major transversal road or
+rail infrastructure lines.</p>
+<p>By default, the all-in-one function <code>delineate()</code> only
+returns the corridor boundary. The corridor can be segmented either by
+setting the argument <code>segments = TRUE</code> in
+<code>delineate()</code> or by using the
+<code>delineate_segments()</code> function in a separate step.</p>
+<p>To demonstrate this as a separate step, we will use the
+<code>bucharest_dambovita$corridor</code> from the package data, as well
+as <code>bucharest_osm$streets</code> and
+<code>bucharest_osm$railways</code> from rcrisp example data as
+input.</p>
+<p>We first prepare the network and select all the streets and railways
+that cover the river corridor plus a small buffer region (see also
+<code>vignette(&quot;network-preparation&quot;)</code>):</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Add a buffer region around the corridor</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>corridor_buffer <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_buffer</span>(bucharest_dambovita<span class="sc">$</span>corridor, <span class="dv">500</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co"># Filter the streets and railwayas to the buffer area</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>streets <span class="ot">&lt;-</span> bucharest_osm<span class="sc">$</span>streets <span class="sc">|&gt;</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_filter</span>(corridor_buffer, <span class="at">.predicate =</span> sf<span class="sc">::</span>st_covered_by)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>railways <span class="ot">&lt;-</span> bucharest_osm<span class="sc">$</span>railways <span class="sc">|&gt;</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_filter</span>(corridor_buffer, <span class="at">.predicate =</span> sf<span class="sc">::</span>st_covered_by)</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co"># Build combined street and railway network</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>network_filtered <span class="ot">&lt;-</span> <span class="fu">rbind</span>(streets, railways) <span class="sc">|&gt;</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  <span class="fu">as_network</span>()</span></code></pre></div>
+<p>We then delineate segments in the corridor. The algorithm spits the
+corridor using river-crossing transversal edges that form continuous
+lines in the network:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>segmented_corridor <span class="ot">&lt;-</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="fu">delineate_segments</span>(bucharest_dambovita<span class="sc">$</span>corridor,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>                     network_filtered,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>                     <span class="fu">st_geometry</span>(bucharest_osm<span class="sc">$</span>river_centerline))</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(streets))</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="fu">plot</span>(segmented_corridor, <span class="at">border =</span> <span class="st">&quot;orange&quot;</span>, <span class="at">lwd =</span> <span class="dv">3</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
