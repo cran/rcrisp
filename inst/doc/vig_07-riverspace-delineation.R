@@ -12,6 +12,12 @@ library(sf)
 bucharest_osm <- get_osm_example_data()
 bucharest_dem <- get_dem_example_data()
 
+if (any(is.null(bucharest_osm), is.null(bucharest_dem))) {
+  cat("NOTE: Example data was not found; ",
+      "subsequent code chunks will be skipped.\n", sep = "")
+  knitr::opts_chunk$set(eval = FALSE)
+}
+
 ## ----data---------------------------------------------------------------------
 buildings <- bucharest_osm$buildings
 river <- bucharest_osm$river_surface

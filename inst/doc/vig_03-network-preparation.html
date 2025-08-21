@@ -342,14 +342,20 @@ delineation</h1>
 
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(rcrisp)</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co">#&gt; Warning in check_cache(): Cache dir: /Users/claudiuforgaci/Library/Caches/org.R-project.R/R/rcrisp - size: 133 MB - oldest file from: 2025-06-26.</span></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co">#&gt; Clean up files older than 30 days with: `rcrisp::clear_cache(&#39;2025-06-04&#39;)` (or remove all cached files with: `rcrisp::clear_cache()`.</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co">#&gt; Warning in check_cache(): Cache dir: /Users/claudiuforgaci/Library/Caches/org.R-project.R/R/rcrisp - size: 104 MB - oldest file from: 2025-08-01.</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co">#&gt; Clean up files older than 30 days with: `rcrisp::clear_cache(&#39;2025-07-22&#39;)` (or remove all cached files with: `rcrisp::clear_cache()`.</span></span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
 <span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(sfnetworks)</span>
 <span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a></span>
 <span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>bucharest_osm <span class="ot">&lt;-</span> <span class="fu">get_osm_example_data</span>()</span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>bucharest_dem <span class="ot">&lt;-</span> <span class="fu">get_dem_example_data</span>()</span></code></pre></div>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>bucharest_dem <span class="ot">&lt;-</span> <span class="fu">get_dem_example_data</span>()</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">any</span>(<span class="fu">is.null</span>(bucharest_osm), <span class="fu">is.null</span>(bucharest_dem))) {</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;NOTE: Example data was not found; &quot;</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>      <span class="st">&quot;subsequent code chunks will be skipped.</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>  knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">eval =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>}</span></code></pre></div>
 <div id="input-data" class="section level2">
 <h2>1. Input data</h2>
 <p>In this article we show how to set up the spatial network for a city

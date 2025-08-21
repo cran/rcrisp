@@ -8,14 +8,18 @@ coordinate reference system (CRS)}
 reproject(x, crs, ...)
 }
 \arguments{
-\item{x}{Raster or vector object}
+\item{x}{Raster (\code{SpatRaster}) or vector (\code{sf}) object}
 
-\item{crs}{CRS to be projected to}
+\item{crs}{CRS to be projected to, provided as \code{numeric}, \code{integer} or
+\code{logical} vector of length one or \code{\link[sf:coerce-methods]{sf::crs}}. If \code{numeric}, the value
+should be a positive number with unrestricted upper bound representing
+a valid EPSG code.}
 
 \item{...}{Optional arguments for raster or vector reproject functions}
 }
 \value{
-Object reprojected to specified CRS
+\code{\link[sf:sf]{sf::sf}}, \code{\link[sf:sfc]{sf::sfc}}, or \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object reprojected
+to specified CRS
 }
 \description{
 Reproject a raster or vector dataset to the specified

@@ -1,53 +1,72 @@
-## ----include = FALSE----------------------------------------------------------
+## ----setup, include=FALSE-----------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = FALSE,
   message = FALSE,
-  warning = FALSE
+  warning = FALSE,
+  eval = FALSE
 )
 
-bucharest_osm <- rcrisp::get_osm_example_data()
-bucharest_dem <- rcrisp::get_dem_example_data()
-
-## ----setup, include = FALSE---------------------------------------------------
+## -----------------------------------------------------------------------------
 # library(rcrisp)
 # library(purrr)
 # 
-# bucharest_osm <- get_osm_example_data()
-# bucharest_dem <- get_dem_example_data()
-# 
-# city_boundary <- bucharest_osm$boundary
-# river_surface <- bucharest_osm$river_surface
-# river_centerline <- bucharest_osm$river_centerline
-# railways <- bucharest_osm$railways
-# streets <- bucharest_osm$streets
-
-## -----------------------------------------------------------------------------
 # city_name <- "Bucharest"
 # river_name <- "Dâmbovița"
-# crs <- 32635  # EPSG code for UTM zone 35N
-# bbox_buffer <- 2000  # in m, expand bbox for street network
+# crs <- 32635  # EPSG code for UTM zone 35N, where Bucharest is located
+# network_buffer <- 3000  # in m, buffer around the river to get the network
+# buildings_buffer <- 100  # in m, buffer around the river to get the buildings
 
 ## -----------------------------------------------------------------------------
 # bb <- get_osm_bb(city_name)
 
 ## -----------------------------------------------------------------------------
-# city_boundary <- get_osm_city_boundary(city_name, bb, crs)
-# river <- get_osm_river(river_name, bb, crs)
+# city_boundary <- get_osm_city_boundary(bb, city_name, crs)
+# river <- get_osm_river(bb, river_name, crs)
+# aoi_network <- get_river_aoi(river, bb, buffer_distance = network_buffer)
 # streets <- get_osm_streets(bb, crs)
 # railways <- get_osm_railways(bb, crs)
-
-## -----------------------------------------------------------------------------
+# aoi_buildings <- get_river_aoi(river, bb, buffer_distance = buildings_buffer)
+# buildings <- get_osm_buildings(bb, crs)
+# 
 # bucharest_osm <- list(
-#   bb = bb,
 #   boundary = city_boundary,
 #   river_centerline = river$centerline,
 #   river_surface = river$surface,
+#   aoi_network = aoi_network,
 #   streets = streets,
-#   railways = railways
+#   railways = railways,
+#   aoi_buildings = aoi_buildings,
+#   buildings = buildings
 # )
-# 
+
+## -----------------------------------------------------------------------------
+# bucharest_osm <- get_osmdata(city_name, river_name,
+#                              network_buffer = network_buffer)
+
+## -----------------------------------------------------------------------------
+# names(bucharest_osm)
+
+## ----plot, echo=FALSE, fig.alt="All layers combined", fig.cap="All layers combined (buildings not shown)"----
+# bbox <- sf::st_bbox(bucharest_osm$boundary)
+# plot(
+#   NA,
+#   xlim = c(bbox["xmin"], bbox["xmax"]),
+#   ylim = c(bbox["ymin"], bbox["ymax"]),
+#   asp = 1,
+#   xaxt = "n",
+#   yaxt = "n",
+#   xlab = "",
+#   ylab = "",
+#   bty = "n"
+# )
+# plot(bucharest_osm$railways$geom, col = "orange", add = TRUE)
+# plot(bucharest_osm$streets$geom, color = "black", add = TRUE)
+# plot(bucharest_osm$river_surface, col = "blue", border = "blue", add = TRUE)
+# plot(bucharest_osm$river_centerline, col = "blue", add = TRUE)
+# plot(bucharest_osm$boundary, border = "red", add = TRUE)
+
+## ----eval=FALSE---------------------------------------------------------------
 # walk2(
 #   bucharest_osm,
 #   names(bucharest_osm),
@@ -58,25 +77,4 @@ bucharest_dem <- rcrisp::get_dem_example_data()
 #     quiet = TRUE
 #   )
 # )
-
-## -----------------------------------------------------------------------------
-# bucharest_osm <- get_osmdata(city_name, river_name, buffer = bbox_buffer)
-
-## -----------------------------------------------------------------------------
-# names(bucharest_osm)
-
-## ----eval=TRUE, fig.alt="All layers combined", fig.cap="All layers combined"----
-if (requireNamespace("ggplot2", quietly = TRUE)) {
-  library(ggplot2)
-  ggplot() +
-    geom_sf(data = bucharest_osm$boundary, fill = "grey", color = "black") +
-    geom_sf(data = bucharest_osm$railways, color = "orange") +
-    geom_sf(data = bucharest_osm$streets, color = "black") +
-    geom_sf(data = bucharest_osm$river_surface, fill = "blue", color = "blue") +
-    geom_sf(data = bucharest_osm$river_centerline, color = "blue") +
-    xlim(417000, 439000) +
-    ylim(4908800, 4932500)
-} else {
-  message("ggplot2 not available; skipping plot examples.")
-}
 

@@ -17,6 +17,21 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r srr-tags, eval=FALSE, echo=FALSE}
+#' @srrstats {G1.0} This vignette provides several literature references used
+#'   for the method of valley delineation.
+#' @srrstats {G1.3} Literature references are given for the Cost Distance
+#'   algorithm used for valley delineation.
+#' @srrstats {G2.10} This vignette uses `sf::st_geometry()` to extract the
+#'   geometry column from the `bucharest_osm$river_centerline` and
+#'   `bucharest_osm$river_surface`. This is used when only geometry information
+#'   is needed from that point onwards and all other attributes (i.e., columns)
+#'   can be safely discarded. The object returned by `sf::st_geometry()` is a
+#'   simple feature geometry list column of class `sfc`.
+#' @srrstats {SP2.2a} This vignette demonstrates the compatibility of `rcrisp`
+#'   routines with `terra` workflows.
+```
+
 In a typical rcrisp workflow, valley delineation is used in the context of corridor delineation. When the parameter `method = "valley"` is set (this is the default value) in `delineate_corridor()`, first the river valley is extracted from a Digital Elevation Model (DEM) with `delineate_valley()` and then the resulting valley edge is used to "guide" the delineation of the corridor on the street network, as shown in `vignette("corridor-delineation")`.
 
 In this article, we describe how `delineate_valley()` works and how it can be used independently. `delineate_valley()` uses a Cost Distance algorithm, variants of which are mostly used for the delineation of wet area mapping and valley bottom delineation in non-urban contexts [@agren2014; @murphy2009; @white2012].
@@ -32,6 +47,12 @@ library(sf)
 
 bucharest_osm <- get_osm_example_data()
 bucharest_dem <- get_dem_example_data()
+
+if (any(is.null(bucharest_osm), is.null(bucharest_dem))) {
+  cat("NOTE: Example data was not found; ",
+      "subsequent code chunks will be skipped.\n", sep = "")
+  knitr::opts_chunk$set(eval = FALSE)
+}
 
 # Load data for valley delineation
 dem <- bucharest_dem

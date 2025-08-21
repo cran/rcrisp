@@ -3,6 +3,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+# rcrisp 0.2.0 - 2025-08-21
+
+## Added
+
+- Package-level documentation has been added.
+- Assertions using the `checkmate` package were added to input parameters throughout the package.
+- Examples were expanded to demonstrates the use of all parameters.
+- Delineated valley has been added to the `bucharest_dambovita` example package data.
+
+## Fixed
+
+- Classes of input parameters and return values were specified.
+- `get_osm_example_data()` and `get_dem_example_data()` fail gracefully in examples, vignettes and tests, that is, return a message and NULL, if internet resource is not available.
+
+## Changed
+
+- Replaced `sapply()` with `vapply()` throughout the package for improved type safety.
+- Updated package metadata in `DESCRIPTION` and `codemeta.json`
+- Organized function reference page into meaningful sections.
+
+## Removed
+
+- The `dem_to_ceg()` function was removed from the package as it is not used.
+
 # Version 0.1.4 - 2025-07-04
 
 ## Added

@@ -9,14 +9,17 @@ get_osm_river(bb, river_name, crs = NULL, force_download = FALSE)
 \arguments{
 \item{bb}{Bounding box of class \code{bbox}}
 
-\item{river_name}{The name of the river}
+\item{river_name}{The name of the river as character vector of length 1,
+case-sensitive.}
 
 \item{crs}{Coordinate reference system as EPSG code}
 
 \item{force_download}{Download data even if cached data is available}
 }
 \value{
-A list with the river centreline and surface
+A list with the river centreline as object of class
+\code{\link[sf:sfc]{sf::sfc_LINESTRING}} or \code{\link[sf:sfc]{sf::sfc_MULTILINESTRING}} and river surface of
+class \code{\link[sf:sfc]{sf::sfc_POLYGON}} or \code{\link[sf:sfc]{sf::sfc_MULTIPOLYGON}}.
 }
 \description{
 Get the river centreline and surface from OpenStreetMap
@@ -25,6 +28,7 @@ Get the river centreline and surface from OpenStreetMap
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bb <- get_osm_bb("Bucharest")
 crs <- get_utm_zone(bb)
-get_osm_river(bb, "Dâmbovița", crs)
+get_osm_river(bb = bb, river_name = "Dâmbovița", crs = crs,
+              force_download = FALSE)
 \dontshow{\}) # examplesIf}
 }
