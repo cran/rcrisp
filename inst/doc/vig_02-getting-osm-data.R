@@ -22,7 +22,9 @@ knitr::opts_chunk$set(
 
 ## -----------------------------------------------------------------------------
 # city_boundary <- get_osm_city_boundary(bb, city_name, crs)
-# river <- get_osm_river(bb, river_name, crs)
+# river_centerline <- get_osm_river_centerline(bb, river_name, crs)
+# river_surface <- get_osm_river_surface(bb, river_centerline, crs)
+# river <- c(river_centerline, river_surface)
 # aoi_network <- get_river_aoi(river, bb, buffer_distance = network_buffer)
 # streets <- get_osm_streets(bb, crs)
 # railways <- get_osm_railways(bb, crs)
@@ -31,8 +33,8 @@ knitr::opts_chunk$set(
 # 
 # bucharest_osm <- list(
 #   boundary = city_boundary,
-#   river_centerline = river$centerline,
-#   river_surface = river$surface,
+#   river_centerline = river_centerline,
+#   river_surface = river_surface,
 #   aoi_network = aoi_network,
 #   streets = streets,
 #   railways = railways,

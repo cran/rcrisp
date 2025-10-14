@@ -27,6 +27,7 @@ mock_city_boundary_geom <- sf::st_as_sfc(bb_bucharest)
 mock_city_boundary <- sf::st_sf(
   name = "Bucharest",
   `name:ro` = "București",
+  admin_level = "4",
   geometry = mock_city_boundary_geom
 )
 
@@ -94,14 +95,14 @@ test_that("The correct OSM data elements are retrieved", {
   # data that is needed is the river centerline, which is used to setup the
   # areas of interest used for the network and building retrieval.
   river_centerline <- sf::st_geometry(mock_river_lines)[1]
-  river <- list(centerline = river_centerline, surface = NULL)
   with_mocked_bindings(
     get_osm_bb = function(...) bb_bucharest,
-    get_osm_river = function(...) river,
-    get_osm_streets = function(...) NULL,
-    get_osm_railways = function(...) NULL,
-    get_osm_buildings = function(...) NULL,
-    get_osm_city_boundary = function(...) NULL,
+    get_osm_river_centerline = function(...) river_centerline,
+    get_osm_river_surface = function(...) sf::st_buffer(river_centerline, 10),
+    get_osm_streets = function(...) "streets",
+    get_osm_railways = function(...) "railways",
+    get_osm_buildings = function(...) "buildings",
+    get_osm_city_boundary = function(...) "city_boundary",
     {
       # By default, the bb, river, river suf
       osmdata_default <- get_osmdata("Bucharest",
@@ -131,16 +132,16 @@ test_that("The correct OSM data elements are retrieved", {
   # verify that the correct elements are returned
   expect_setequal(
     names(osmdata_default),
-    c("bb", "river_centerline", "river_surface", "boundary")
+    c("bb", "river_centerline", "boundary")
   )
   expect_setequal(
     names(osmdata_nobound),
-    c("bb", "river_centerline", "river_surface")
+    c("bb", "river_centerline")
   )
   expect_setequal(
     names(osmdata_network),
     c(
-      "bb", "river_centerline", "river_surface", "boundary", "aoi_network",
+      "bb", "river_centerline", "boundary", "aoi_network",
       "streets", "railways"
     )
   )
@@ -225,7 +226,7 @@ test_that("River retrieval raise error if no river is found in the bb", {
   with_mocked_bindings(
     osmdata_as_sf = function(...) list(osm_lines = NULL),
     expect_error(
-      get_osm_river(bb_bucharest, "Thames", force_download = TRUE),
+      get_osm_river_centerline(bb_bucharest, "Thames", force_download = TRUE),
       "No waterway geometries found"
     )
   )
@@ -237,7 +238,7 @@ test_that("River retrieval raise error if river is not found in the bb", {
   with_mocked_bindings(
     osmdata_as_sf = function(...) list(osm_lines = mock_river_lines),
     expect_error(
-      get_osm_river(bb_bucharest, "Thames", force_download = TRUE),
+      get_osm_river_centerline(bb_bucharest, "Thames", force_download = TRUE),
       "Thames"
     )
   )
@@ -248,11 +249,32 @@ test_that("River lines and surface are properly set up", {
     osmdata_as_sf = function(...) {
       list(osm_lines = mock_river_lines, osm_polygons = mock_river_polygons)
     },
-    river <- get_osm_river(bb_bucharest, "Dâmbovița", force_download = TRUE)
+    {
+      river_centerline <- get_osm_river_centerline(bb_bucharest, "Dâmbovița",
+                                                   force_download = TRUE)
+      river_surface <- get_osm_river_surface(bb_bucharest, river_centerline,
+                                             force_download = TRUE)
+    }
   )
-  expect_setequal(names(river), c("centerline", "surface"))
-  expect_true(sf::st_is(river$centerline, "MULTILINESTRING"))
-  expect_true(sf::st_is(river$surface, "MULTIPOLYGON"))
+  expect_true(sf::st_is(river_centerline, "MULTILINESTRING"))
+  expect_true(sf::st_is(river_surface, "MULTIPOLYGON"))
+})
+
+test_that("If no river surface is found, an empty sfc object is returned", {
+  crs <- sf::st_crs("EPSG:32632")
+  bb <- sf::st_bbox(c(xlim = -1, xmax = 1, ylim = -1, ymax = 1))
+  river_centerline <- sf::st_sfc(
+    sf::st_linestring(matrix(c(-2, 2, 0, 0), ncol = 2)), crs = crs
+  )
+  mocked_osmdata_response <- list(
+    osm_polygons = sf::st_as_sf(sf::st_sfc(sf::st_polygon(), crs = crs))
+  )
+  with_mocked_bindings(osmdata_as_sf = function(...) mocked_osmdata_response, {
+    water_surface <- get_osm_river_surface(aoi, river_centerline, crs = crs,
+                                           force_download = FALSE)
+  })
+  expect_equal(length(water_surface), 0)
+  expect_equal(sf::st_crs(water_surface), crs)
 })
 
 test_that("If no railways are found, an empty sf object is returned", {
@@ -279,4 +301,25 @@ test_that("Partial matches of names are accounted for", {
   expect_equal(nrow(res), 3)
   # All columns are returned
   expect_equal(ncol(res), 4)
+})
+
+test_that("OSM buildings are retrieved with bounding box as input", {
+  crs <- sf::st_crs("EPSG:32632")
+  aoi <- sf::st_bbox(c(xmin = 1, xmax = 2, ymin = 1, ymax = 2),
+                     crs = crs)
+  mocked_osmdata_response <- list(osm_polygons = sf::st_sf(
+    building = c("building", "building"),
+    geometry = sf::st_sfc(
+      sf::st_polygon(list(matrix(c(1, 1, 1.5, 1, 1.5, 1.5, 1, 1.5, 1, 1),
+                                 ncol = 2, byrow = TRUE))),
+      sf::st_polygon(list(matrix(c(1.5, 1.5, 2, 1.5, 2, 2, 1.5, 2, 1.5, 1.5),
+                                 ncol = 2, byrow = TRUE)))
+    ),
+    crs = crs
+  ))
+  with_mocked_bindings(osmdata_as_sf = \(...) mocked_osmdata_response, {
+    buildings <- get_osm_buildings(aoi, crs = crs, force_download = FALSE)
+  })
+  expect_equal(length(buildings), 2)
+  expect_equal(sf::st_crs(buildings), crs)
 })

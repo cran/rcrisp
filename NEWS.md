@@ -3,6 +3,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+# rcrisp 0.3.0 - 2025-10-13
+
+## Added
+
+- Overall workflow was documented in a new vignette and the package README
+- Badges to Research Software Directory and R-universe were added
+- Corridors are also allowed to be multipolygons when delineating segments
+- Badge with Status at rOpenSci Software Peer Review was added
+
+## Fixed
+
+- Exact matches in `match_osm_name()` are returned before partial matches.
+- Bug returning county boundary instead of city boundary was fixed.
+- Bug for river with no crossings was fixed. Delineation fails with informative error.
+- Code chunk with OSM data retrieval was disabled in getting started vignette.
+- `get_osm_buildings()` does not error when given bounding box as input.
+- STAC asset URL retrieval test fails gracefully on unsuccessful HTTP request.
+- Suppress warning in wrong city name test.
+
+## Changed
+
+- OSM river surface retrieval was moved to a separate function.
+- Small rivers for which OSM river surface is not available can still be delineated.
+
 # rcrisp 0.2.0 - 2025-08-21
 
 ## Added
