@@ -12,6 +12,7 @@ Provides tools to automate the morphological delineation of riverside urban area
 Useful links:
 \itemize{
   \item \url{https://cityriverspaces.github.io/rcrisp/}
+  \item \url{https://github.com/CityRiverSpaces/rcrisp}
   \item \doi{10.5281/zenodo.15793526}
   \item Report bugs at \url{https://github.com/CityRiverSpaces/rcrisp/issues}
 }
@@ -22,6 +23,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Claudiu Forgaci \email{c.forgaci@tudelft.nl} (\href{https://orcid.org/0000-0003-3218-5102}{ORCID}) [copyright holder]
   \item Francesco Nattino \email{f.nattino@esciencecenter.nl} (\href{https://orcid.org/0000-0003-3286-0139}{ORCID})
 }
 
@@ -29,6 +31,7 @@ Other contributors:
 \itemize{
   \item Fakhereh Alidoost \email{f.alidoost@esciencecenter.nl} (\href{https://orcid.org/0000-0001-8407-6472}{ORCID}) [contributor]
   \item Meiert Willem Grootes \email{m.grootes@esciencecenter.nl} (\href{https://orcid.org/0000-0002-5733-4795}{ORCID}) [contributor]
+  \item Yehan Wu \email{y.wu-13@tudelft.nl} (\href{https://orcid.org/0000-0003-4063-7535}{ORCID}) [contributor]
   \item Netherlands eScience Center \email{info@esciencecenter.nl} [funder]
 }
 

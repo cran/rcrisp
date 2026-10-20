@@ -1,6 +1,6 @@
 Package: rcrisp
 Title: Automate the Delineation of Urban River Spaces
-Version: 0.3.2
+Version: 1.0.0
 Authors@R: c(
     person("Claudiu", "Forgaci", , "c.forgaci@tudelft.nl", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0003-3218-5102")),
@@ -10,7 +10,13 @@ Authors@R: c(
            comment = c(ORCID = "0000-0001-8407-6472")),
     person("Meiert Willem", "Grootes", , "m.grootes@esciencecenter.nl", role = "ctb",
            comment = c(ORCID = "0000-0002-5733-4795")),
-    person("Netherlands eScience Center", , , "info@esciencecenter.nl", role = "fnd")
+    person("Yehan", "Wu", , "y.wu-13@tudelft.nl", role = c("ctb"),
+           comment = c(ORCID = "0000-0003-4063-7535")),
+    person("Netherlands eScience Center", , , "info@esciencecenter.nl", role = "fnd"),
+    person("Mark", "Padgham", role = "rev",
+           comment = "Mark reviewed the package (v. 0.3.1) for rOpenSci, see <https://github.com/ropensci/software-review/issues/718>"),
+    person("Anatolii", "Tsyplenkov", role = "rev",
+           comment = "Anatolii reviewed the package (v. 0.3.1) for rOpenSci, see <https://github.com/ropensci/software-review/issues/718>")
   )
 Description: Provides tools to automate the morphological delineation of
     riverside urban areas based on a method introduced in Forgaci (2018)
@@ -22,21 +28,22 @@ Description: Provides tools to automate the morphological delineation of
     that can be related to the river as a central element.
 License: Apache License (>= 2)
 URL: https://cityriverspaces.github.io/rcrisp/,
+        https://github.com/CityRiverSpaces/rcrisp,
         https://doi.org/10.5281/zenodo.15793526
 BugReports: https://github.com/CityRiverSpaces/rcrisp/issues
 Depends: R (>= 4.1.0)
-Imports: checkmate, dbscan, dplyr, lwgeom, osmdata, rcoins, rlang,
+Imports: checkmate, cli, dbscan, dplyr, lwgeom, osmdata, rcoins, rlang,
         rstac, sf (>= 0.9.0), sfheaders, sfnetworks, stringr, terra,
         tidygraph, units, visor
-Suggests: autotest, knitr, purrr, rmarkdown, testthat (>= 3.0.0), withr
-Additional_repositories: https://ropensci.r-universe.dev
+Suggests: autotest, ggplot2, knitr, purrr, rmarkdown, testthat (>=
+        3.0.0), withr
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.2
+Config/roxygen2/version: 8.1.1
 NeedsCompilation: no
-Packaged: 2026-09-22 01:25:54 UTC; claudiuforgaci
+Packaged: 2026-10-20 18:54:48 UTC; claudiuforgaci
 Author: Claudiu Forgaci [aut, cre, cph] (ORCID:
     <https://orcid.org/0000-0003-3218-5102>),
   Francesco Nattino [aut] (ORCID:
@@ -45,7 +52,13 @@ Author: Claudiu Forgaci [aut, cre, cph] (ORCID:
     <https://orcid.org/0000-0001-8407-6472>),
   Meiert Willem Grootes [ctb] (ORCID:
     <https://orcid.org/0000-0002-5733-4795>),
-  Netherlands eScience Center [fnd]
+  Yehan Wu [ctb] (ORCID: <https://orcid.org/0000-0003-4063-7535>),
+  Netherlands eScience Center [fnd],
+  Mark Padgham [rev] (Mark reviewed the package (v. 0.3.1) for rOpenSci,
+    see <https://github.com/ropensci/software-review/issues/718>),
+  Anatolii Tsyplenkov [rev] (Anatolii reviewed the package (v. 0.3.1) for
+    rOpenSci, see
+    <https://github.com/ropensci/software-review/issues/718>)
 Maintainer: Claudiu Forgaci <c.forgaci@tudelft.nl>
 Repository: CRAN
-Date/Publication: 2026-09-22 12:10:10 UTC
+Date/Publication: 2026-10-20 19:10:02 UTC

@@ -12,13 +12,13 @@ as object of class \code{\link{Date}} or as a case dependent character vector
 accepted by \code{\link[=as.Date]{as.Date()}}}
 }
 \value{
-List of file paths of removed files
+\code{NULL}
 }
 \description{
 Remove files from cache directory either before a given date or entirely.
 }
 \examples{
-\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Clear all cache
 clear_cache()
 
